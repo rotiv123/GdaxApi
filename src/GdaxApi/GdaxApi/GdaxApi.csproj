@@ -2,6 +2,10 @@
 
   <PropertyGroup>
     <TargetFramework>netcoreapp2.0</TargetFramework>
+    <GeneratePackageOnBuild>false</GeneratePackageOnBuild>
+    <RepositoryUrl>https://github.com/rotiv123/GdaxApi</RepositoryUrl>
+    <PackageProjectUrl>https://github.com/rotiv123/GdaxApi</PackageProjectUrl>
+    <PackageTags>gdax coinbase api</PackageTags>
   </PropertyGroup>
 
   <ItemGroup>
