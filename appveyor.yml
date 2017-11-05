@@ -22,12 +22,10 @@ build:
   include_nuget_references: true
   verbosity: normal
 before_package:
-- cmd: 
+- cmd: nuget pack src\GdaxApi\GdaxApi\GdaxApi.csproj
 artifacts:
 - path: '**\*.nupkg'
   name: nuget.org
-before_deploy:
-- cmd: nuget pack src\GdaxApi\GdaxApi\GdaxApi.csproj
 deploy:
 - provider: NuGet
   api_key:
