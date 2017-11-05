@@ -41,8 +41,8 @@
         public static async Task<Page<T>> SendAsync<T>(this ApiRequestBuilder<Page<T>> builder)
         {
             var request = builder.Build();
-            var httpResponse = await request.Api.HttpClient.SendAsync(request).ConfigureAwait(false);
-            using (var response = new ApiPageResponse<T>(httpResponse, request.Api.Serializer))
+            var httpResponse = await builder.Api.HttpClient.SendAsync(request).ConfigureAwait(false);
+            using (var response = new ApiPageResponse<T>(httpResponse, builder.Api.Serializer))
             {
                 return await response.Content.ConfigureAwait(false);
             }

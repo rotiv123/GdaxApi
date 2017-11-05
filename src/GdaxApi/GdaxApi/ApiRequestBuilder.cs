@@ -20,7 +20,7 @@
             };
         }
 
-        protected GdaxApiClient Api => this.api;
+        internal GdaxApiClient Api => this.api;
 
         public ApiRequestBuilder<T> Content(object content)
         {
@@ -42,7 +42,7 @@
             return this;
         }
 
-        public ApiRequest<T> Build()
+        public HttpRequestMessage Build()
         {
             var req = Create(this.uriBuilder.Uri);
             req.Content = new StringContent(this.content, Encoding.UTF8, "application/json");
@@ -50,7 +50,7 @@
             return req;
         }
 
-        protected abstract ApiRequest<T> Create(Uri uri);
+        protected abstract HttpRequestMessage Create(Uri uri);
     }
 
     public class ApiGetRequestBuilder<T> : ApiRequestBuilder<T>
@@ -60,9 +60,9 @@
         {
         }
 
-        protected override ApiRequest<T> Create(Uri uri)
+        protected override HttpRequestMessage Create(Uri uri)
         {
-            var req = new ApiRequest<T>(this.Api, HttpMethod.Get, uri);
+            var req = new HttpRequestMessage(HttpMethod.Get, uri);
             req.Headers.Add("Accept", "application/json");
             return req;
         }
@@ -75,9 +75,9 @@
         {
         }
 
-        protected override ApiRequest<T> Create(Uri uri)
+        protected override HttpRequestMessage Create(Uri uri)
         {
-            var req = new ApiRequest<T>(this.Api, HttpMethod.Post, uri);
+            var req = new HttpRequestMessage(HttpMethod.Post, uri);
             req.Headers.Add("Accept", "application/json");
             return req;
         }
@@ -90,9 +90,9 @@
         {
         }
 
-        protected override ApiRequest<T> Create(Uri uri)
+        protected override HttpRequestMessage Create(Uri uri)
         {
-            var req = new ApiRequest<T>(this.Api, HttpMethod.Delete, uri);
+            var req = new HttpRequestMessage(HttpMethod.Delete, uri);
             req.Headers.Add("Accept", "application/json");
             return req;
         }
