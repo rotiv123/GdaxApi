@@ -11,10 +11,9 @@ var credentials = new GdaxApi.Authentication.GdaxCredentials
 						Passphrase = "...",
 						Secret = "..."
 					};
-using (var api = new GdaxApiClient(new GdaxApi.Utils.Serializer(), credentials))
+using (var api = new GdaxApiClient(credentials))
 {
     var orders = await api.GetAllOrders().Limit(3).SendAsync();
-    
 	// ...
 }
 ```

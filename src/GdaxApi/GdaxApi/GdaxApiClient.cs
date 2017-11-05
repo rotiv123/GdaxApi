@@ -11,10 +11,10 @@
         private readonly ISerializer serializer;
         private readonly bool hasOwnershipOfHttpClient;
 
-        public GdaxApiClient(ISerializer serializer, GdaxCredentials credentials)
+        public GdaxApiClient(GdaxCredentials credentials)
         {
-            this.serializer = serializer;
-            this.httpClient = new HttpClient(new GdaxAuthenticationHandler(credentials));
+            this.serializer = new Serializer();
+            this.httpClient = new HttpClient(new GdaxAuthenticationHandler(credentials){ InnerHandler = new HttpClientHandler()});
             this.hasOwnershipOfHttpClient = true;
         }
 
