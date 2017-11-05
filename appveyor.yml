@@ -4,7 +4,6 @@ branches:
   - master
 image: Visual Studio 2017
 configuration: Release
-platform: Any CPU
 dotnet_csproj:
   patch: true
   file: '**\*.csproj'
@@ -23,7 +22,6 @@ install:
     dotnet-sdk-2.0.0-win-x64.exe /install /quiet /norestart /log install.log
 nuget:
   account_feed: true
-  project_feed: true
   disable_publish_on_pr: true
 build_script:
 - cmd: >-
