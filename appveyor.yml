@@ -27,7 +27,7 @@ build_script:
 - cmd: >-
     dotnet restore src\GdaxApi\GdaxApi.sln
 
-    dotnet pack src\GdaxApi\GdaxApi\GdaxApi.csproj -o artifacts -c Release /p:PackageVersion={version} /p:Version={version}
+    dotnet pack src\GdaxApi\GdaxApi\GdaxApi.csproj -o artifacts -c Release
 test: off
 artifacts:
 - path: src/GdaxApi/GdaxApi/artifacts/*.nupkg
