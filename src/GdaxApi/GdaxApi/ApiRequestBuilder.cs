@@ -45,7 +45,11 @@
         public HttpRequestMessage Build()
         {
             var req = Create(this.uriBuilder.Uri);
-            req.Content = new StringContent(this.content, Encoding.UTF8, "application/json");
+            if (this.content != null)
+	        {
+		        req.Content = new StringContent(this.content, Encoding.UTF8, "application/json"); 
+	        }
+
             req.Headers.Add("User-Agent", "TraderBot");
             return req;
         }

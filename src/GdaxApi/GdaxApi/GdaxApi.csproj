@@ -10,6 +10,10 @@
     <AssemblyVersion>0.0.0.0</AssemblyVersion>
     <FileVersion>0.0.0.0</FileVersion>
     <Version>0.0.0</Version>
+    <Description>A .NET client for the GDAX REST API https://api.gdax.com.</Description>
+    <Authors>Rotiv</Authors>
+    <PackageLicenseUrl>https://github.com/rotiv123/GdaxApi/blob/master/LICENSE</PackageLicenseUrl>
+    <PackageReleaseNotes />
   </PropertyGroup>
 
   <ItemGroup>
