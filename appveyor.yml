@@ -30,7 +30,7 @@ build_script:
     dotnet pack src\GdaxApi\GdaxApi\GdaxApi.csproj -o artifacts\packages -c Release
 test: off
 artifacts:
-- path: artifacts/packages/*.nupkg
+- path: src/GdaxApi/GdaxApi/artifacts/packages/*.nupkg
   name: nuget.org
 deploy:
 - provider: NuGet
