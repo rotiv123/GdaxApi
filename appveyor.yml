@@ -25,9 +25,9 @@ nuget:
   disable_publish_on_pr: true
 build_script:
 - cmd: >-
-    nuget restore src\GdaxApi\GdaxApi.sln
+    dotnet restore src\GdaxApi\GdaxApi.sln
 
-    nuget pack src\GdaxApi\GdaxApi\GdaxApi.csproj -o artifacts\packages
+    dotnet pack src\GdaxApi\GdaxApi\GdaxApi.csproj -o artifacts\packages -c Release
 test: off
 artifacts:
 - path: artifacts/packages/*.nupkg
