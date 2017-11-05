@@ -29,7 +29,7 @@ build_script:
 - cmd: >-
     nuget restore src\GdaxApi\GdaxApi.sln
 
-    nuget pack src\GdaxApi\GdaxApi\GdaxApi.csproj -o artifacts\packages -c Release
+    nuget pack src\GdaxApi\GdaxApi\GdaxApi.csproj -o artifacts\packages
 test: off
 artifacts:
 - path: artifacts/packages/*.nupkg
