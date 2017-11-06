@@ -14,7 +14,7 @@
             return builder.AddQueryParam("after", after);
         }
 
-        public static ApiRequestBuilder<T> Limit<T>(this ApiRequestBuilder<T> builder, int limit)
+        public static ApiRequestBuilder<Page<T>> Limit<T>(this ApiRequestBuilder<Page<T>> builder, int limit)
         {
             return builder.AddQueryParam("limit", limit);
         }

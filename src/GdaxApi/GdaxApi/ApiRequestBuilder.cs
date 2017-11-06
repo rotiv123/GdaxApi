@@ -4,17 +4,18 @@
     using System.Net.Http;
     using System.Text;
 
-    public abstract class ApiRequestBuilder<T>
+    public class ApiRequestBuilder<T>
     {
-        private static readonly Uri BaseUri = new Uri("https://api.gdax.com/");
         private readonly GdaxApiClient api;
         private readonly UriBuilder uriBuilder;
+        private readonly HttpMethod method;
         private string content;
 
-        public ApiRequestBuilder(GdaxApiClient api, string path)
+        public ApiRequestBuilder(GdaxApiClient api, HttpMethod method, string path)
         {
             this.api = api;
-            this.uriBuilder = new UriBuilder(BaseUri)
+            this.method = method;
+            this.uriBuilder = new UriBuilder(api.BaseUri)
             {
                 Path = path
             };
@@ -50,54 +51,14 @@
 		        req.Content = new StringContent(this.content, Encoding.UTF8, "application/json"); 
 	        }
 
-            req.Headers.Add("User-Agent", "TraderBot");
             return req;
         }
 
-        protected abstract HttpRequestMessage Create(Uri uri);
-    }
-
-    public class ApiGetRequestBuilder<T> : ApiRequestBuilder<T>
-    {
-        public ApiGetRequestBuilder(GdaxApiClient api, string path)
-            : base(api, path)
+        protected virtual HttpRequestMessage Create(Uri uri)
         {
-        }
-
-        protected override HttpRequestMessage Create(Uri uri)
-        {
-            var req = new HttpRequestMessage(HttpMethod.Get, uri);
+            var req = new HttpRequestMessage(this.method, uri);
             req.Headers.Add("Accept", "application/json");
-            return req;
-        }
-    }
-
-    public class ApiPostRequestBuilder<T> : ApiRequestBuilder<T>
-    {
-        public ApiPostRequestBuilder(GdaxApiClient api, string path)
-            : base(api, path)
-        {
-        }
-
-        protected override HttpRequestMessage Create(Uri uri)
-        {
-            var req = new HttpRequestMessage(HttpMethod.Post, uri);
-            req.Headers.Add("Accept", "application/json");
-            return req;
-        }
-    }
-
-    public class ApiDeleteRequestBuilder<T> : ApiRequestBuilder<T>
-    {
-        public ApiDeleteRequestBuilder(GdaxApiClient api, string path)
-            : base(api, path)
-        {
-        }
-
-        protected override HttpRequestMessage Create(Uri uri)
-        {
-            var req = new HttpRequestMessage(HttpMethod.Delete, uri);
-            req.Headers.Add("Accept", "application/json");
+            req.Headers.Add("User-Agent", "GdaxApiClient");
             return req;
         }
     }

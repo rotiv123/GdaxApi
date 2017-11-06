@@ -9,9 +9,9 @@
 
     public class Deserializer<T>
     {
-        private static readonly MethodInfo ConvertToArrayMethod = typeof(Deserializer<T>)
+        private static readonly Lazy<MethodInfo> ConvertToArrayMethod = new Lazy<MethodInfo>(() => typeof(Deserializer<T>)
             .GetMethod("ConvertToArray", BindingFlags.Static | BindingFlags.NonPublic)
-            .MakeGenericMethod(typeof(T).GetElementType());
+            .MakeGenericMethod(typeof(T).GetElementType()));
 
         private static readonly ConstructorInfo CopyConstructor = typeof(T).IsArray ?
             typeof(T).GetElementType().GetConstructors().Where(x => x.GetParameters().Length == 1).FirstOrDefault() :
@@ -30,7 +30,7 @@
                 {
                     if (typeof(T).IsArray)
                     {
-                        return (T)ConvertToArrayMethod.Invoke(null, new object[] { jarr });
+                        return (T)ConvertToArrayMethod.Value.Invoke(null, new object[] { jarr });
                     }
                     else
                     {
