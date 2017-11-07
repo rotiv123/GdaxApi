@@ -2,7 +2,9 @@
 {
     using System;
     using System.Net.Http;
+    using System.Threading.Tasks;
     using GdaxApi.Authentication;
+    using GdaxApi.Exceptions;
     using GdaxApi.Utils;
 
     public class GdaxApiClient : IDisposable
@@ -44,8 +46,6 @@
 
         internal ISerializer Serializer => this.serializer;
 
-        internal HttpClient HttpClient => this.httpClient;
-
         internal ApiRequestBuilder<T> Get<T>(string path)
         {
             return new ApiRequestBuilder<T>(this, HttpMethod.Get, path);
@@ -59,6 +59,26 @@
         internal ApiRequestBuilder<T> Delete<T>(string path)
         {
             return new ApiRequestBuilder<T>(this, HttpMethod.Delete, path);
+        }
+
+        internal async Task<T> SendAsync<T>(HttpRequestMessage request, Func<HttpResponseMessage, ApiResponse<T>> responseBuilder)
+        {
+            try
+            {
+                var httpResponse = await this.httpClient.SendAsync(request).ConfigureAwait(false);
+                using (var response = responseBuilder(httpResponse))
+                {
+                    return await response.Content.ConfigureAwait(false);
+                }
+            }
+            catch(GdaxApiException)
+            {
+                throw;
+            }
+            catch (Exception ex)
+            {
+                throw new GdaxApiException("GdaxApi call failed", ex);
+            }
         }
 
         protected virtual void Dispose(bool disposing)

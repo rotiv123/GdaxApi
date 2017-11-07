@@ -11,6 +11,8 @@
 
         ApiRequestBuilder<OrderResponse> PostLimitOrder(LimitOrderRequest order);
 
+        ApiRequestBuilder<OrderResponse> PostMarketOrder(MarketOrderRequest order);
+
         ApiRequestBuilder<GenericResponse> PostCancelOrder(Guid orderId);
     }
 
@@ -37,6 +39,11 @@
         {
             return this.api.PostCancelOrder(orderId);
         }
+
+        public ApiRequestBuilder<OrderResponse> PostMarketOrder(MarketOrderRequest order)
+        {
+            return this.api.PostMarketOrder(order);
+        }
     }
 
     public static class OrderClientExtensions
@@ -58,6 +65,20 @@
                             product_id = order.ProductId,
                             price = order.Price.ToString(CultureInfo.InvariantCulture),
                             size = order.Size.ToString(CultureInfo.InvariantCulture),
+                        });
+        }
+
+        public static ApiRequestBuilder<OrderResponse> PostMarketOrder(this GdaxApiClient api, MarketOrderRequest order)
+        {
+            return api.Post<OrderResponse>("orders")
+                      .Content(
+                        new
+                        {
+                            type = "market",
+                            side = order.Side.ToString().ToLower(),
+                            product_id = order.ProductId,
+                            funds = order.Funds?.ToString(CultureInfo.InvariantCulture),
+                            size = order.Size?.ToString(CultureInfo.InvariantCulture),
                         });
         }
 

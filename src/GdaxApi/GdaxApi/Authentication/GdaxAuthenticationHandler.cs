@@ -31,7 +31,7 @@
 
         protected override async Task<HttpResponseMessage> SendAsync(HttpRequestMessage request, CancellationToken cancellationToken)
         {
-            var timestamp = this.dateProvider.UnixTimestamp;
+            var timestamp = (int)this.dateProvider.UnixTimestamp;
             var signature = await this.ComputeSignature(request, timestamp).ConfigureAwait(false);
 
             SetHttpRequestHeaders(request, timestamp, signature);
@@ -49,7 +49,7 @@
             base.Dispose(disposing);
         }
 
-        private void SetHttpRequestHeaders(HttpRequestMessage requestMessage, double timestamp, string signature)
+        private void SetHttpRequestHeaders(HttpRequestMessage requestMessage, int timestamp, string signature)
         {
             requestMessage.Headers.Add("CB-ACCESS-KEY", this.credentials.ApiKey);
             requestMessage.Headers.Add("CB-ACCESS-SIGN", signature);
@@ -57,7 +57,7 @@
             requestMessage.Headers.Add("CB-ACCESS-PASSPHRASE", this.credentials.Passphrase);
         }
 
-        private async Task<string> ComputeSignature(HttpRequestMessage request, double timestamp)
+        private async Task<string> ComputeSignature(HttpRequestMessage request, int timestamp)
         {
             var content = request.Content == null ? null : (await request.Content.ReadAsStringAsync().ConfigureAwait(false));
             var prehash = $"{timestamp}{request.Method.ToString().ToUpper()}{request.RequestUri.PathAndQuery}{content}";

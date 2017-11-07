@@ -2,20 +2,23 @@
 {
     public abstract class OrderRequest
     {
-        public OrderSide Side { get; set; }
+        public OrderSide Side { get; }
 
-        public string ProductId { get; set; }
+        public string ProductId { get; }
 
         public OrerType Type { get; }
 
-        protected OrderRequest(OrerType type)
+        protected OrderRequest(OrerType type, OrderSide side, string productId)
         {
             this.Type = type;
+            this.Side = side;
+            this.ProductId = productId;
         }
 
         public enum OrerType
         {
             Limit,
+            Market,
             Stop
         }
 
@@ -28,27 +31,22 @@
 
     public class LimitOrderRequest : OrderRequest
     {
-        public LimitOrderRequest()
-            : base(OrerType.Limit)
+        public LimitOrderRequest(OrderSide side, string productId)
+            : base(OrerType.Limit, side, productId)
         {
         }
-        
+
         public decimal Size { get; set; }
 
         public decimal Price { get; set; }
     }
 
-    public class StopOrderRequest : OrderRequest
+    public class MarketOrderRequest : OrderRequest
     {
-        public StopOrderRequest()
-            : base(OrerType.Stop)
+        public MarketOrderRequest(OrderSide side, string productId)
+            : base(OrerType.Market, side, productId)
         {
         }
-
-        /// <summary>
-        /// Desired price at which the stop order triggers.
-        /// </summary>
-        public decimal Price { get; set; }
 
         public decimal? Size { get; set; }
 

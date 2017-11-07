@@ -3,6 +3,7 @@
     using System;
     using System.Net.Http;
     using System.Threading.Tasks;
+    using GdaxApi.Exceptions;
     using GdaxApi.Utils;
 
     public class ApiResponse<T> : IDisposable
@@ -38,6 +39,11 @@
         protected virtual async Task<T> ReadAsync()
         {
             var str = await this.httpReponse.Content.ReadAsStringAsync().ConfigureAwait(false);
+            if (this.httpReponse.StatusCode != System.Net.HttpStatusCode.OK)
+            {
+                throw new GdaxApiException($"{this.httpReponse.StatusCode} {str}");
+            }
+
             return this.serializer.Deserialize<T>(str);
         }
     }
@@ -47,11 +53,7 @@
         public static async Task<T> SendAsync<T>(this ApiRequestBuilder<T> builder)
         {
             var request = builder.Build();
-            var httpResponse = await builder.Api.HttpClient.SendAsync(request).ConfigureAwait(false);
-            using (var response = new ApiResponse<T>(httpResponse, builder.Api.Serializer))
-            {
-                return await response.Content.ConfigureAwait(false);
-            }
+            return await builder.Api.SendAsync<T>(request, httpResponse => new ApiResponse<T>(httpResponse, builder.Api.Serializer)).ConfigureAwait(false);
         }
     }
 }
