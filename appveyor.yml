@@ -28,8 +28,7 @@ build_script:
     dotnet restore src\GdaxApi\GdaxApi.sln -v q
 
     dotnet pack src\GdaxApi\GdaxApi\GdaxApi.csproj -o artifacts -c Release -v q
-test_script:
-- cmd: dotnet xunit src\GdaxApi\GdaxApi.Tests\GdaxApi.Tests.csproj -c Release -r artifacts
+test: off
 artifacts:
 - path: src/GdaxApi/GdaxApi/artifacts/*.nupkg
   name: nuget.org
