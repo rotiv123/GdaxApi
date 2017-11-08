@@ -33,7 +33,7 @@ test_script:
 artifacts:
 - path: src/GdaxApi/GdaxApi/artifacts/*.nupkg
   name: nuget.org
-- path: src\GdaxApi\GdaxApi.Tests\artifacts\*
+- path: src\GdaxApi\GdaxApi.Tests\artifacts\*.*
 deploy:
 - provider: NuGet
   api_key:
