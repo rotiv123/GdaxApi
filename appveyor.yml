@@ -29,11 +29,11 @@ build_script:
 
     dotnet pack src\GdaxApi\GdaxApi\GdaxApi.csproj -o artifacts -c Release --verbosity m
 test_script:
-- cmd: dotnet test src\GdaxApi\GdaxApi.Tests\GdaxApi.Tests.csproj -c Release -r artifacts/tests
+- cmd: dotnet test src\GdaxApi\GdaxApi.Tests\GdaxApi.Tests.csproj -c Release -r artifacts
 artifacts:
 - path: src/GdaxApi/GdaxApi/artifacts/*.nupkg
   name: nuget.org
-- path: src\GdaxApi\GdaxApi\artifacts\tests\*
+- path: src\GdaxApi\GdaxApi.Tests\artifacts\*
 deploy:
 - provider: NuGet
   api_key:
