@@ -25,9 +25,9 @@ nuget:
   disable_publish_on_pr: true
 build_script:
 - cmd: >-
-    dotnet restore src\GdaxApi\GdaxApi.sln --verbosity m
+    dotnet restore src\GdaxApi\GdaxApi.sln -v q
 
-    dotnet pack src\GdaxApi\GdaxApi\GdaxApi.csproj -o artifacts -c Release --verbosity m
+    dotnet pack src\GdaxApi\GdaxApi\GdaxApi.csproj -o artifacts -c Release -v q
 test_script:
 - cmd: dotnet test src\GdaxApi\GdaxApi.Tests\GdaxApi.Tests.csproj -c Release -r artifacts
 artifacts:
