@@ -29,7 +29,7 @@ build_script:
 
     dotnet pack src\GdaxApi\GdaxApi\GdaxApi.csproj -o artifacts -c Release
 test_script:
-- cmd: dotnet test src\GdaxApi\GdaxApi\GdaxApi.csproj
+- cmd: dotnet test src\GdaxApi\GdaxApi.Tests\GdaxApi.Tests.csproj
 artifacts:
 - path: src/GdaxApi/GdaxApi/artifacts/*.nupkg
   name: nuget.org
