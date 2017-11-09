@@ -15,7 +15,7 @@
         private readonly ISerializer serializer;
         private readonly bool hasOwnershipOfHttpClient;
         private readonly Uri baseUri;
-        
+
         public GdaxApiClient(GdaxCredentials credentials, ISerializer serializer = null, bool sandbox = false)
         {
             if (credentials == null)
@@ -71,13 +71,17 @@
                     return await response.Content.ConfigureAwait(false);
                 }
             }
-            catch(GdaxApiException)
+            catch (GdaxApiException)
             {
                 throw;
             }
+            catch (AggregateException aex)
+            {
+                throw aex.Wrap("GdaxApi call failed");
+            }
             catch (Exception ex)
             {
-                throw new GdaxApiException("GdaxApi call failed", ex);
+                throw ex.Wrap("GdaxApi call failed");
             }
         }
 

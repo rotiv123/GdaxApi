@@ -47,9 +47,9 @@
         {
             var req = Create(this.uriBuilder.Uri);
             if (this.content != null)
-	        {
-		        req.Content = new StringContent(this.content, Encoding.UTF8, "application/json"); 
-	        }
+            {
+                req.Content = new StringContent(this.content, Encoding.UTF8, "application/json");
+            }
 
             return req;
         }

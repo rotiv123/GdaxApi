@@ -1,5 +1,7 @@
 ﻿namespace GdaxApi.Utils
 {
+    using System;
+    using GdaxApi.Exceptions;
     using Newtonsoft.Json;
 
     public interface ISerializer
@@ -13,12 +15,26 @@
     {
         public T Deserialize<T>(string text)
         {
-            return Deserializer<T>.Default.Deserialize(text);
+            try
+            {
+                return Deserializer<T>.Default.Deserialize(text);
+            }
+            catch (Exception ex)
+            {
+                throw new GdaxApiSerializationException($"Deserialization of type {typeof(T).FullName} failed", ex);
+            }
         }
 
         public string Serialize(object obj)
         {
-            return JsonConvert.SerializeObject(obj);
+            try
+            {
+                return JsonConvert.SerializeObject(obj);
+            }
+            catch (Exception ex)
+            {
+                throw new GdaxApiSerializationException($"Serialization failed", ex);
+            }
         }
     }
 }
