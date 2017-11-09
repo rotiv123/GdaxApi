@@ -24,5 +24,10 @@
         {
             return (dateTime - UnixEpoch).TotalSeconds;
         }
+
+        public static DateTimeOffset FromUnixTimestamp(double timestamp)
+        {
+            return UnixEpoch.AddSeconds(timestamp);
+        }
     }
 }

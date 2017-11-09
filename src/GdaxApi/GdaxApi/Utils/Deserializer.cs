@@ -32,10 +32,6 @@
                     {
                         return (T)ConvertToArrayMethod.Value.Invoke(null, new object[] { jarr });
                     }
-                    else
-                    {
-                        throw new NotSupportedException($"{typeof(T).Name} is not supported :(");
-                    }
                 }
 
                 return (T)CopyConstructor.Invoke(new object[] { obj });

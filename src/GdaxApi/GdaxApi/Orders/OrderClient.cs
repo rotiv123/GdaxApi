@@ -7,7 +7,7 @@
 
     public interface IOrderClient
     {
-        ApiRequestBuilder<Page<OrderResponse>> GetAllOrders();
+        ApiRequestBuilder<Page<OrderResponse, DateTimeOffset>> GetAllOrders();
 
         ApiRequestBuilder<OrderResponse> PostLimitOrder(LimitOrderRequest order);
 
@@ -25,7 +25,7 @@
             this.api = api;
         }
 
-        public ApiRequestBuilder<Page<OrderResponse>> GetAllOrders()
+        public ApiRequestBuilder<Page<OrderResponse, DateTimeOffset>> GetAllOrders()
         {
             return this.api.GetAllOrders();
         }
@@ -48,9 +48,9 @@
 
     public static class OrderClientExtensions
     {
-        public static ApiRequestBuilder<Page<OrderResponse>> GetAllOrders(this GdaxApiClient api)
+        public static ApiRequestBuilder<Page<OrderResponse, DateTimeOffset>> GetAllOrders(this GdaxApiClient api)
         {
-            return api.Get<Page<OrderResponse>>("orders")
+            return api.Get<Page<OrderResponse, DateTimeOffset>>("orders")
                       .AddQueryParam("status", "all");
         }
 

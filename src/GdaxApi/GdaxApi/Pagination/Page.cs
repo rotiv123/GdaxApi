@@ -1,13 +1,11 @@
 ﻿namespace GdaxApi.Pagination
 {
-    using System;
-
-    public class Page<T>
+    public class Page<T, U>
     {
         public T[] Items { get; internal set; }
 
-        public DateTimeOffset Before { get; internal set; }
+        public U Before { get; internal set; }
 
-        public DateTimeOffset After { get; internal set; }
+        public U After { get; internal set; }
     }
 }
