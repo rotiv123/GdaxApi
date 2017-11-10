@@ -5,16 +5,16 @@
     using GdaxApi.Utils;
     using Newtonsoft.Json.Linq;
 
-    public class CandleResponse
+    public class Candle
     {
         public Bucket[] Buckets { get; set; }
 
-        public CandleResponse()
+        public Candle()
         {
             this.Buckets = new Bucket[0];
         }
 
-        public CandleResponse(JArray data)
+        internal Candle(JArray data)
         {
             this.Buckets = data.Select(
                 x => new Bucket

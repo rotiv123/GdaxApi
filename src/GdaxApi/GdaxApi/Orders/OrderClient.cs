@@ -7,11 +7,11 @@
 
     public interface IOrderClient
     {
-        ApiRequestBuilder<Page<OrderResponse, DateTimeOffset>> GetAllOrders();
+        ApiRequestBuilder<Page<Order, DateTimeOffset>> GetAllOrders();
 
-        ApiRequestBuilder<OrderResponse> PostLimitOrder(LimitOrderRequest order);
+        ApiRequestBuilder<Order> PostLimitOrder(LimitOrderRequest order);
 
-        ApiRequestBuilder<OrderResponse> PostMarketOrder(MarketOrderRequest order);
+        ApiRequestBuilder<Order> PostMarketOrder(MarketOrderRequest order);
 
         ApiRequestBuilder<GenericResponse> PostCancelOrder(Guid orderId);
     }
@@ -25,12 +25,12 @@
             this.api = api;
         }
 
-        public ApiRequestBuilder<Page<OrderResponse, DateTimeOffset>> GetAllOrders()
+        public ApiRequestBuilder<Page<Order, DateTimeOffset>> GetAllOrders()
         {
             return this.api.GetAllOrders();
         }
 
-        public ApiRequestBuilder<OrderResponse> PostLimitOrder(LimitOrderRequest order)
+        public ApiRequestBuilder<Order> PostLimitOrder(LimitOrderRequest order)
         {
             return this.api.PostLimitOrder(order);
         }
@@ -40,7 +40,7 @@
             return this.api.PostCancelOrder(orderId);
         }
 
-        public ApiRequestBuilder<OrderResponse> PostMarketOrder(MarketOrderRequest order)
+        public ApiRequestBuilder<Order> PostMarketOrder(MarketOrderRequest order)
         {
             return this.api.PostMarketOrder(order);
         }
@@ -48,15 +48,15 @@
 
     public static class OrderClientExtensions
     {
-        public static ApiRequestBuilder<Page<OrderResponse, DateTimeOffset>> GetAllOrders(this GdaxApiClient api)
+        public static ApiRequestBuilder<Page<Order, DateTimeOffset>> GetAllOrders(this GdaxApiClient api)
         {
-            return api.Get<Page<OrderResponse, DateTimeOffset>>("orders")
+            return api.Get<Page<Order, DateTimeOffset>>("orders")
                       .AddQueryParam("status", "all");
         }
 
-        public static ApiRequestBuilder<OrderResponse> PostLimitOrder(this GdaxApiClient api, LimitOrderRequest order)
+        public static ApiRequestBuilder<Order> PostLimitOrder(this GdaxApiClient api, LimitOrderRequest order)
         {
-            return api.Post<OrderResponse>("orders")
+            return api.Post<Order>("orders")
                       .Content(
                         new
                         {
@@ -68,9 +68,9 @@
                         });
         }
 
-        public static ApiRequestBuilder<OrderResponse> PostMarketOrder(this GdaxApiClient api, MarketOrderRequest order)
+        public static ApiRequestBuilder<Order> PostMarketOrder(this GdaxApiClient api, MarketOrderRequest order)
         {
-            return api.Post<OrderResponse>("orders")
+            return api.Post<Order>("orders")
                       .Content(
                         new
                         {

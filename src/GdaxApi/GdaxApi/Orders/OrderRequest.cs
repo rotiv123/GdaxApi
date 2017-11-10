@@ -14,19 +14,6 @@
             this.Side = side;
             this.ProductId = productId;
         }
-
-        public enum OrerType
-        {
-            Limit,
-            Market,
-            Stop
-        }
-
-        public enum OrderSide
-        {
-            Buy,
-            Sell
-        }
     }
 
     public class LimitOrderRequest : OrderRequest

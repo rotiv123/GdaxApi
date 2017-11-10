@@ -2,19 +2,19 @@
 {
     using System;
 
-    public class TradeResponse
+    public class Trade
     {
-        public TradeResponse()
+        public Trade()
         {
         }
 
-        public TradeResponse(dynamic data)
+        internal Trade(dynamic data)
         {
             this.Time = DateTimeOffset.Parse(data.time.ToString());
             this.TradeId = data.trade_id;
             this.Price = data.price;
             this.Size = data.size;
-            this.Side = data.side;
+            this.Side = Enum.Parse(typeof(TradeSide), data.side.ToString(), true);
         }
 
         public DateTimeOffset Time { get; set; }
@@ -25,6 +25,6 @@
 
         public decimal Size { get; set; }
 
-        public string Side { get; set; }
+        public TradeSide Side { get; set; }
     }
 }

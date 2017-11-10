@@ -4,7 +4,7 @@
 
     public interface ITimeClient
     {
-        ApiRequestBuilder<TimeResponse> GetTime();
+        ApiRequestBuilder<ApiTime> GetTime();
     }
 
     public class TimeClient : ITimeClient
@@ -16,7 +16,7 @@
             this.api = api;
         }
 
-        public ApiRequestBuilder<TimeResponse> GetTime()
+        public ApiRequestBuilder<ApiTime> GetTime()
         {
             return this.api.GetTime();
         }
@@ -24,9 +24,9 @@
 
     public static class TimeClientExtensions
     {
-        public static ApiRequestBuilder<TimeResponse> GetTime(this GdaxApiClient api)
+        public static ApiRequestBuilder<ApiTime> GetTime(this GdaxApiClient api)
         {
-            return api.Get<TimeResponse>("time");
+            return api.Get<ApiTime>("time");
         }
     }
 }

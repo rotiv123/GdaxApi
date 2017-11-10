@@ -2,17 +2,17 @@
 {
     using System;
 
-    public class TimeResponse
+    public class ApiTime
     {
         public DateTimeOffset Timestamp { get; set; }
 
         public double UnixTimestamp { get; set; }
 
-        public TimeResponse()
+        public ApiTime()
         {
         }
 
-        public TimeResponse(dynamic data)
+        public ApiTime(dynamic data)
         {
             this.Timestamp = data.iso;
             this.UnixTimestamp = data.epoch;
