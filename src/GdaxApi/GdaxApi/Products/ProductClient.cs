@@ -6,7 +6,7 @@
 
     public interface IProductClient
     {
-        ApiRequestBuilder<Candle> GetCandles(string productId, DateTimeOffset start, DateTimeOffset end, TimeSpan granularity);
+        ApiRequestBuilder<CandleSet> GetCandles(string productId, DateTimeOffset start, DateTimeOffset end, TimeSpan granularity);
 
         ApiRequestBuilder<Page<Trade, long>> GetTrades(string productId);
     }
@@ -20,7 +20,7 @@
             this.api = api;
         }
 
-        public ApiRequestBuilder<Candle> GetCandles(string productId, DateTimeOffset start, DateTimeOffset end, TimeSpan granularity)
+        public ApiRequestBuilder<CandleSet> GetCandles(string productId, DateTimeOffset start, DateTimeOffset end, TimeSpan granularity)
         {
             return this.api.GetCandles(productId, start, end, granularity);
         }
@@ -33,9 +33,9 @@
 
     public static class ProductClientExtensions
     {
-        public static ApiRequestBuilder<Candle> GetCandles(this GdaxApiClient api, string productId, DateTimeOffset start, DateTimeOffset end, TimeSpan granularity)
+        public static ApiRequestBuilder<CandleSet> GetCandles(this GdaxApiClient api, string productId, DateTimeOffset start, DateTimeOffset end, TimeSpan granularity)
         {
-            return api.Get<Candle>($"products/{productId}/candles")
+            return api.Get<CandleSet>($"products/{productId}/candles")
                       .AddQueryParam("start", start.ToString("u"))
                       .AddQueryParam("end", end.ToString("u"))
                       .AddQueryParam("granularity", (int)granularity.TotalSeconds);

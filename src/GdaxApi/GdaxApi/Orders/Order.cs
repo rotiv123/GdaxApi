@@ -26,7 +26,7 @@
         {
         }
 
-        public Order(dynamic data)
+        internal Order(dynamic data)
         {
             this.Id = data.id;
             this.Price = data.price;

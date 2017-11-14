@@ -12,7 +12,7 @@
         {
         }
 
-        public ApiTime(dynamic data)
+        internal ApiTime(dynamic data)
         {
             this.Timestamp = data.iso;
             this.UnixTimestamp = data.epoch;

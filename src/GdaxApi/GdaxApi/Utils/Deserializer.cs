@@ -15,7 +15,7 @@
 
         private static readonly ConstructorInfo CopyConstructor = typeof(T).IsArray ?
             typeof(T).GetElementType().GetConstructors().Where(x => x.GetParameters().Length == 1).FirstOrDefault() :
-            typeof(T).GetConstructors().Where(x => x.GetParameters().Length == 1).FirstOrDefault();
+            typeof(T).GetConstructors(BindingFlags.Instance | BindingFlags.NonPublic).Where(x => x.GetParameters().Length == 1).FirstOrDefault();
 
         private static readonly Deserializer<T> defaultInstance = new Deserializer<T>();
 

@@ -5,19 +5,19 @@
     using GdaxApi.Utils;
     using Newtonsoft.Json.Linq;
 
-    public class Candle
+    public class CandleSet
     {
-        public Bucket[] Buckets { get; set; }
+        public Candle[] Buckets { get; set; }
 
-        public Candle()
+        public CandleSet()
         {
-            this.Buckets = new Bucket[0];
+            this.Buckets = new Candle[0];
         }
 
-        internal Candle(JArray data)
+        internal CandleSet(JArray data)
         {
             this.Buckets = data.Select(
-                x => new Bucket
+                x => new Candle
                 {
                     Time = DateTimeExtensions.FromUnixTimestamp(x[0].Value<double>()),
                     Low = x[1].Value<decimal>(),
@@ -28,7 +28,7 @@
                 }).ToArray();
         }
 
-        public class Bucket
+        public class Candle
         {
             public DateTimeOffset Time { get; set; }
 
