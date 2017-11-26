@@ -14,8 +14,8 @@
             .MakeGenericMethod(typeof(T).GetElementType()));
 
         private static readonly ConstructorInfo CopyConstructor = typeof(T).IsArray ?
-            typeof(T).GetElementType().GetConstructors().Where(x => x.GetParameters().Length == 1).FirstOrDefault() :
-            typeof(T).GetConstructors(BindingFlags.Instance | BindingFlags.NonPublic).Where(x => x.GetParameters().Length == 1).FirstOrDefault();
+            Array.Find(typeof(T).GetElementType().GetConstructors(BindingFlags.Instance | BindingFlags.NonPublic), x => x.GetParameters().Length == 1) :
+            Array.Find(typeof(T).GetConstructors(BindingFlags.Instance | BindingFlags.NonPublic), x => x.GetParameters().Length == 1);
 
         private static readonly Deserializer<T> defaultInstance = new Deserializer<T>();
 
@@ -25,13 +25,10 @@
         {
             if (CopyConstructor != null)
             {
-                var obj = JsonConvert.DeserializeObject<dynamic>(text);
-                if (obj is JArray jarr)
+                var obj = JsonConvert.DeserializeObject<JToken>(text);
+                if (typeof(T).IsArray)
                 {
-                    if (typeof(T).IsArray)
-                    {
-                        return (T)ConvertToArrayMethod.Value.Invoke(null, new object[] { jarr });
-                    }
+                    return (T)ConvertToArrayMethod.Value.Invoke(null, new object[] { obj });
                 }
 
                 return (T)CopyConstructor.Invoke(new object[] { obj });

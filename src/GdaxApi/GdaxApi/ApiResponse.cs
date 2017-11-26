@@ -39,6 +39,7 @@
         protected virtual async Task<T> ReadAsync()
         {
             var str = await this.httpReponse.Content.ReadAsStringAsync().ConfigureAwait(false);
+
             if (this.httpReponse.StatusCode != System.Net.HttpStatusCode.OK)
             {
                 throw new GdaxApiException($"{this.httpReponse.StatusCode} {str}");
@@ -50,10 +51,10 @@
 
     public static class ApiResponseExtensions
     {
-        public static async Task<T> SendAsync<T>(this ApiRequestBuilder<T> builder)
+        public static Task<T> SendAsync<T>(this ApiRequestBuilder<T> builder)
         {
             var request = builder.Build();
-            return await builder.Api.SendAsync<T>(request, httpResponse => new ApiResponse<T>(httpResponse, builder.Api.Serializer)).ConfigureAwait(false);
+            return builder.Api.SendAsync<T>(request, httpResponse => new ApiResponse<T>(httpResponse, builder.Api.Serializer));
         }
     }
 }

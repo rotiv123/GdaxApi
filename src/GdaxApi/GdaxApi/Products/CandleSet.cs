@@ -7,13 +7,11 @@
 
     public class CandleSet
     {
-        public Candle[] Buckets { get; set; }
-
         public CandleSet()
         {
             this.Buckets = new Candle[0];
         }
-
+        
         internal CandleSet(JArray data)
         {
             this.Buckets = data.Select(
@@ -27,6 +25,8 @@
                     Volume = x[5].Value<decimal>()
                 }).ToArray();
         }
+
+        public Candle[] Buckets { get; set; }
 
         public class Candle
         {
