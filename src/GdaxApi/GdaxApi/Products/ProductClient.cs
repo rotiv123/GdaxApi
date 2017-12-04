@@ -29,6 +29,16 @@
         {
             return this.api.GetTrades(productId);
         }
+
+        public ApiRequestBuilder<AggregatedBook> GetBookLevel2(string productId)
+        {
+            return this.api.GetBookLevel2(productId);
+        }
+
+        public ApiRequestBuilder<AggregatedBook> GetBookLevel1(string productId)
+        {
+            return this.api.GetBookLevel2(productId);
+        }
     }
 
     public static class ProductClientExtensions
@@ -44,6 +54,18 @@
         public static ApiRequestBuilder<Page<Trade, long>> GetTrades(this GdaxApiClient api, string productId)
         {
             return api.Get<Page<Trade, long>>($"products/{productId}/trades");
+        }
+
+        public static ApiRequestBuilder<AggregatedBook> GetBookLevel2(this GdaxApiClient api, string productId)
+        {
+            return api.Get<AggregatedBook>($"products/{productId}/book")
+                      .AddQueryParam("level", 2);
+        }
+
+        public static ApiRequestBuilder<AggregatedBook> GetBookLevel1(this GdaxApiClient api, string productId)
+        {
+            return api.Get<AggregatedBook>($"products/{productId}/book")
+                      .AddQueryParam("level", 1);
         }
     }
 }

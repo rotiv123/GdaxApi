@@ -4,6 +4,7 @@
     using System.Net.Http;
     using System.Reflection;
     using System.Threading.Tasks;
+    using GdaxApi.Exceptions;
     using GdaxApi.Pagination;
     using GdaxApi.Utils;
 
@@ -25,6 +26,11 @@
         protected override async Task<Page<T, U>> ReadAsync()
         {
             var str = await this.HttpReponse.Content.ReadAsStringAsync().ConfigureAwait(false);
+            if (this.HttpReponse.StatusCode != System.Net.HttpStatusCode.OK)
+            {
+                throw new GdaxApiException($"{this.HttpReponse.StatusCode} {str}");
+            }
+
             var page = new Page<T, U> { Items = this.Serializer.Deserialize<T[]>(str) };
 
             if (this.HttpReponse.Headers.TryGetValues(BeforeHeader, out var beforeValues))
