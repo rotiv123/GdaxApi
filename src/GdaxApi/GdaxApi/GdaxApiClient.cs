@@ -12,9 +12,7 @@
         private static readonly Uri BaseUriPublic = new Uri("https://api.gdax.com/");
         private static readonly Uri BaseUriSandbox = new Uri("https://api-public.sandbox.gdax.com/");
         private readonly HttpClient httpClient;
-        private readonly ISerializer serializer;
         private readonly bool hasOwnershipOfHttpClient;
-        private readonly Uri baseUri;
 
         public GdaxApiClient(GdaxCredentials credentials, ISerializer serializer = null, bool sandbox = false)
         {
@@ -23,18 +21,18 @@
                 throw new ArgumentNullException(nameof(credentials));
             }
 
-            this.serializer = serializer ?? new Serializer();
+            this.Serializer = serializer ?? new Serializer();
             this.httpClient = new HttpClient(new GdaxAuthenticationHandler(credentials) { InnerHandler = new HttpClientHandler() });
             this.hasOwnershipOfHttpClient = true;
-            this.baseUri = sandbox ? BaseUriSandbox : BaseUriPublic;
+            this.BaseUri = sandbox ? BaseUriSandbox : BaseUriPublic;
         }
 
         public GdaxApiClient(HttpClient httpClient, ISerializer serializer = null, bool sandbox = false)
         {
-            this.serializer = serializer ?? new Serializer();
+            this.Serializer = serializer ?? new Serializer();
             this.httpClient = httpClient ?? throw new ArgumentNullException(nameof(httpClient));
             this.hasOwnershipOfHttpClient = false;
-            this.baseUri = sandbox ? BaseUriSandbox : BaseUriPublic;
+            this.BaseUri = sandbox ? BaseUriSandbox : BaseUriPublic;
         }
 
         public void Dispose()
@@ -42,9 +40,9 @@
             Dispose(true);
         }
 
-        internal Uri BaseUri => this.baseUri;
+        internal Uri BaseUri { get; }
 
-        internal ISerializer Serializer => this.serializer;
+        internal ISerializer Serializer { get; }
 
         internal ApiRequestBuilder<T> Get<T>(string path)
         {

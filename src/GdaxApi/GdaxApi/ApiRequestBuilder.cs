@@ -6,14 +6,13 @@
 
     public class ApiRequestBuilder<T>
     {
-        private readonly GdaxApiClient api;
         private readonly UriBuilder uriBuilder;
         private readonly HttpMethod method;
         private string content;
 
         public ApiRequestBuilder(GdaxApiClient api, HttpMethod method, string path)
         {
-            this.api = api;
+            this.Api = api;
             this.method = method;
             this.uriBuilder = new UriBuilder(api.BaseUri)
             {
@@ -21,11 +20,11 @@
             };
         }
 
-        internal GdaxApiClient Api => this.api;
+        internal GdaxApiClient Api { get; }
 
         public ApiRequestBuilder<T> Content(object content)
         {
-            this.content = this.api.Serializer.Serialize(content);
+            this.content = this.Api.Serializer.Serialize(content);
             return this;
         }
 

@@ -22,7 +22,7 @@ namespace GdaxApi.Tests
             {
                 var timeClient = new TimeClient(api);
 
-                var result = await timeClient.GetTime().SendAsync();
+                var result = await timeClient.GetTime().SendAsync().ConfigureAwait(false);
 
                 Assert.NotNull(result);
             }

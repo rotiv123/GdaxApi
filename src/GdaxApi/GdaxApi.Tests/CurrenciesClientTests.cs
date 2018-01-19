@@ -22,7 +22,7 @@ namespace GdaxApi.Tests
             {
                 var currenciesClient = new CurrenciesClient(api);
 
-                var result = await currenciesClient.GetCurrencies().SendAsync();
+                var result = await currenciesClient.GetCurrencies().SendAsync().ConfigureAwait(false);
 
                 Assert.NotNull(result);
             }
