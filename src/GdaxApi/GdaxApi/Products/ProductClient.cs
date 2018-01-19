@@ -9,6 +9,12 @@
         ApiRequestBuilder<CandleSet> GetCandles(string productId, DateTimeOffset start, DateTimeOffset end, TimeSpan granularity);
 
         ApiRequestBuilder<Page<Trade, long>> GetTrades(string productId);
+
+        ApiRequestBuilder<AggregatedBook> GetBookLevel2(string productId);
+
+        ApiRequestBuilder<AggregatedBook> GetBookLevel1(string productId);
+
+        ApiRequestBuilder<Last24HourStat> GetStats(string productId);
     }
 
     public class ProductClient : IProductClient
@@ -39,6 +45,11 @@
         {
             return this.api.GetBookLevel2(productId);
         }
+
+        public ApiRequestBuilder<Last24HourStat> GetStats(string productId)
+        {
+            return this.api.GetStats(productId);
+        }
     }
 
     public static class ProductClientExtensions
@@ -66,6 +77,11 @@
         {
             return api.Get<AggregatedBook>($"products/{productId}/book")
                       .AddQueryParam("level", 1);
+        }
+
+        public static ApiRequestBuilder<Last24HourStat> GetStats(this GdaxApiClient api, string productId)
+        {
+            return api.Get<Last24HourStat>($"products/{productId}/stats");
         }
     }
 }
