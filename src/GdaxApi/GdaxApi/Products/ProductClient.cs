@@ -15,6 +15,8 @@
         ApiRequestBuilder<AggregatedBook> GetBookLevel1(string productId);
 
         ApiRequestBuilder<Last24HourStat> GetStats(string productId);
+
+		ApiRequestBuilder<Page<Product, long>> GetProducts ();
     }
 
     public class ProductClient : IProductClient
@@ -50,6 +52,11 @@
         {
             return this.api.GetStats(productId);
         }
+
+		public ApiRequestBuilder<Page<Product, long>> GetProducts ()
+		{
+			return this.api.GetProducts();
+		}
     }
 
     public static class ProductClientExtensions
@@ -79,9 +86,14 @@
                       .AddQueryParam("level", 1);
         }
 
-        public static ApiRequestBuilder<Last24HourStat> GetStats(this GdaxApiClient api, string productId)
-        {
-            return api.Get<Last24HourStat>($"products/{productId}/stats");
-        }
+        public static ApiRequestBuilder<Last24HourStat> GetStats (this GdaxApiClient api, string productId)
+		{
+			return api.Get<Last24HourStat>($"products/{productId}/stats");
+		}
+
+		public static ApiRequestBuilder<Page<Product, long>> GetProducts (this GdaxApiClient api)
+		{
+			return api.Get<Page<Product, long>>($"products");
+		}
     }
 }
