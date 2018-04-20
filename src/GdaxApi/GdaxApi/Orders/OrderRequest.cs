@@ -6,9 +6,9 @@
 
         public string ProductId { get; }
 
-        public OrerType Type { get; }
+        public OrderType Type { get; }
 
-        protected OrderRequest(OrerType type, OrderSide side, string productId)
+        protected OrderRequest(OrderType type, OrderSide side, string productId)
         {
             this.Type = type;
             this.Side = side;
@@ -16,10 +16,10 @@
         }
     }
 
-    public class LimitOrderRequest : OrderRequest
+    public class LimitOrderRequest: OrderRequest
     {
         public LimitOrderRequest(OrderSide side, string productId)
-            : base(OrerType.Limit, side, productId)
+            : base(OrderType.Limit, side, productId)
         {
         }
 
@@ -28,10 +28,10 @@
         public decimal Price { get; set; }
     }
 
-    public class MarketOrderRequest : OrderRequest
+    public class MarketOrderRequest: OrderRequest
     {
         public MarketOrderRequest(OrderSide side, string productId)
-            : base(OrerType.Market, side, productId)
+            : base(OrderType.Market, side, productId)
         {
         }
 

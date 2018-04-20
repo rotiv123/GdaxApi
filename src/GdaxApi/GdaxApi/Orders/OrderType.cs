@@ -1,6 +1,6 @@
 ﻿namespace GdaxApi.Orders
 {
-    public enum OrerType
+    public enum OrderType
     {
         Limit,
         Market,
