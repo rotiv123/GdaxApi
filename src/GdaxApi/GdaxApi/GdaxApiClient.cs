@@ -12,7 +12,6 @@
         private static readonly Uri BaseUriPublic = new Uri("https://api.gdax.com/");
         private static readonly Uri BaseUriSandbox = new Uri("https://api-public.sandbox.gdax.com/");
         private readonly HttpClient httpClient;
-        private readonly GdaxAuthenticationHandler authenticationHandler;
         private readonly bool hasOwnershipOfHttpClient;
 
         public GdaxApiClient(GdaxCredentials credentials, ISerializer serializer = null, bool sandbox = false)
@@ -28,7 +27,6 @@
             }
 
             this.Serializer = serializer ?? new Serializer();
-            this.authenticationHandler = authenticationHandler;
             this.httpClient = new HttpClient(authenticationHandler);
             this.hasOwnershipOfHttpClient = true;
             this.BaseUri = sandbox ? BaseUriSandbox : BaseUriPublic;
@@ -88,30 +86,6 @@
             {
                 throw ex.Wrap("GdaxApi call failed");
             }
-        }
-
-        /// <summary>
-        /// Gets the stored time offset between the GDAX API web servers time and the clients local time in seconds.
-        /// <para>Note that the stored vs real offset can change over time, periodically check that the stored vs real value does not exceed 30 seconds
-        /// or you will start to recieve "request timestamp expired" exceptions.</para>
-        /// <para>Use the <see cref="GdaxTimeOffset"/> method with the optional parameter 'refresh' set to true to refresh the stored offset.</para>
-        /// </summary>
-        public double GetGdaxTimeOffset { get { return this.authenticationHandler.GetGdaxTimeOffset; } }
-
-        /// <summary>
-        /// Returns the real time offset between the GDAX API web servers time and the clients local time in seconds.
-        /// <para>To allow the client time to more closely match the GDAX API web servers time reducing the likelyhood of a "request timestamp expired" exception,
-        /// you can refresh the stored time offset by using the optional parameter 'refresh'.</para>
-        /// <para>Note that the real vs stored offset can change over time, periodically check that the real vs stored value does not exceed
-        /// 30 seconds and refresh when it does, or you will start to recieve "request timestamp expired" exceptions.</para>
-        /// </summary>
-        public async Task<double> GdaxTimeOffset(bool refresh = false)
-        {
-            try
-            {
-                return await this.authenticationHandler.GdaxTimeOffset(this, refresh);
-            }
-            catch { throw; }
         }
 
         protected virtual void Dispose(bool disposing)
