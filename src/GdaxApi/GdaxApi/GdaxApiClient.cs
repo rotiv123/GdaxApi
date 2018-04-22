@@ -26,6 +26,9 @@
                 throw new ArgumentNullException(nameof(authenticationHandler));
             }
 
+            if (authenticationHandler.InnerHandler == null)
+                authenticationHandler.InnerHandler = new HttpClientHandler();
+
             this.Serializer = serializer ?? new Serializer();
             this.httpClient = new HttpClient(authenticationHandler);
             this.hasOwnershipOfHttpClient = true;
