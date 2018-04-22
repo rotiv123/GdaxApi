@@ -24,8 +24,8 @@
         public GdaxAuthenticationHandler(GdaxCredentials credentials, IDateProvider dateProvider)
             : base()
         {
-            this.credentials = credentials;
-            this.dateProvider = dateProvider;
+            this.credentials = credentials ?? throw new ArgumentNullException(nameof(credentials));
+            this.dateProvider = dateProvider ?? throw new ArgumentNullException(nameof(dateProvider));
             this.timeOffset = new GdaxTimeOffset();
             var key = Convert.FromBase64String(this.credentials.Secret);
             this.hmac = new HMACSHA256(key);

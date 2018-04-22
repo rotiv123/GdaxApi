@@ -12,19 +12,24 @@
         private static readonly Uri BaseUriPublic = new Uri("https://api.gdax.com/");
         private static readonly Uri BaseUriSandbox = new Uri("https://api-public.sandbox.gdax.com/");
         private readonly HttpClient httpClient;
-        private readonly GdaxAuthenticationHandler authenticator;
+        private readonly GdaxAuthenticationHandler authenticationHandler;
         private readonly bool hasOwnershipOfHttpClient;
 
         public GdaxApiClient(GdaxCredentials credentials, ISerializer serializer = null, bool sandbox = false)
+                : this(new GdaxAuthenticationHandler(credentials) { InnerHandler = new HttpClientHandler() }, serializer, sandbox)
         {
-            if (credentials == null)
+        }
+
+        public GdaxApiClient(GdaxAuthenticationHandler authenticationHandler, ISerializer serializer = null, bool sandbox = false)
+        {
+            if (authenticationHandler == null)
             {
-                throw new ArgumentNullException(nameof(credentials));
+                throw new ArgumentNullException(nameof(authenticationHandler));
             }
 
             this.Serializer = serializer ?? new Serializer();
-            this.authenticator = new GdaxAuthenticationHandler(credentials) { InnerHandler = new HttpClientHandler() };
-            this.httpClient = new HttpClient(authenticator);
+            this.authenticationHandler = authenticationHandler;
+            this.httpClient = new HttpClient(authenticationHandler);
             this.hasOwnershipOfHttpClient = true;
             this.BaseUri = sandbox ? BaseUriSandbox : BaseUriPublic;
         }
@@ -91,7 +96,7 @@
         /// or you will start to recieve "request timestamp expired" exceptions.</para>
         /// <para>Use the <see cref="GdaxTimeOffset"/> method with the optional parameter 'refresh' set to true to refresh the stored offset.</para>
         /// </summary>
-        public double GetGdaxTimeOffset { get { return this.authenticator.GetGdaxTimeOffset; } }
+        public double GetGdaxTimeOffset { get { return this.authenticationHandler.GetGdaxTimeOffset; } }
 
         /// <summary>
         /// Returns the real time offset between the GDAX API web servers time and the clients local time in seconds.
@@ -104,7 +109,7 @@
         {
             try
             {
-                return await this.authenticator.GdaxTimeOffset(this, refresh);
+                return await this.authenticationHandler.GdaxTimeOffset(this, refresh);
             }
             catch { throw; }
         }

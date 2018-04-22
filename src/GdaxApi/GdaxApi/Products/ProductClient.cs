@@ -45,7 +45,7 @@
 
         public ApiRequestBuilder<AggregatedBook> GetBookLevel1(string productId)
         {
-            return this.api.GetBookLevel2(productId);
+            return this.api.GetBookLevel1(productId);
         }
 
         public ApiRequestBuilder<Last24HourStat> GetStats(string productId)
@@ -53,7 +53,7 @@
             return this.api.GetStats(productId);
         }
 
-		public ApiRequestBuilder<Page<Product, long>> GetProducts ()
+		public ApiRequestBuilder<Page<Product, long>> GetProducts()
 		{
 			return this.api.GetProducts();
 		}
@@ -93,7 +93,7 @@
 
 		public static ApiRequestBuilder<Page<Product, long>> GetProducts (this GdaxApiClient api)
 		{
-			return api.Get<Page<Product, long>>($"products");
+			return api.Get<Page<Product, long>>("products");
 		}
     }
 }
