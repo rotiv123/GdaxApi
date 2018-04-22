@@ -15,14 +15,19 @@
         private readonly bool hasOwnershipOfHttpClient;
 
         public GdaxApiClient(GdaxCredentials credentials, ISerializer serializer = null, bool sandbox = false)
+                : this(new GdaxAuthenticationHandler(credentials) { InnerHandler = new HttpClientHandler() }, serializer, sandbox)
         {
-            if (credentials == null)
+        }
+
+        public GdaxApiClient(GdaxAuthenticationHandler authenticationHandler, ISerializer serializer = null, bool sandbox = false)
+        {
+            if (authenticationHandler == null)
             {
-                throw new ArgumentNullException(nameof(credentials));
+                throw new ArgumentNullException(nameof(authenticationHandler));
             }
 
             this.Serializer = serializer ?? new Serializer();
-            this.httpClient = new HttpClient(new GdaxAuthenticationHandler(credentials) { InnerHandler = new HttpClientHandler() });
+            this.httpClient = new HttpClient(authenticationHandler);
             this.hasOwnershipOfHttpClient = true;
             this.BaseUri = sandbox ? BaseUriSandbox : BaseUriPublic;
         }
