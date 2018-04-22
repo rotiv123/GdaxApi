@@ -1,9 +1,10 @@
-﻿using System;
-using System.Collections;
-
-namespace GdaxApi.Pagination
+﻿namespace GdaxApi.Pagination
 {
-    public class Page<T, U>: IEnumerable
+    using System;
+    using System.Collections;
+    using System.Collections.Generic;
+
+    public class Page<T, U>: IEnumerable<T>
     {
         public T[] Items { get; internal set; }
 
@@ -11,43 +12,14 @@ namespace GdaxApi.Pagination
 
         public U After { get; internal set; }
 
-        private class PageEnumerator: IEnumerator
+        public IEnumerator<T> GetEnumerator()
         {
-            private readonly T[] items;
-            private int position = -1;
-
-            public PageEnumerator(T[] list)
-            {
-                items = list;
-            }
-
-            public bool MoveNext()
-            {
-                position++;
-                return (position < items.Length);
-            }
-
-            public void Reset() { position = -1; }
-
-            public object Current
-            {
-                get
-                {
-                    try
-                    {
-                        return items[position];
-                    }
-                    catch (IndexOutOfRangeException)
-                    {
-                        throw new InvalidOperationException();
-                    }
-                }
-            }
+            return Array.AsReadOnly(this.Items).GetEnumerator();
         }
 
-        public IEnumerator GetEnumerator()
+        IEnumerator IEnumerable.GetEnumerator()
         {
-            return new PageEnumerator(Items);
+            return this.Items.GetEnumerator();
         }
     }
 }
