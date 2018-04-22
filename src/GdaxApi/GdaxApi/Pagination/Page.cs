@@ -11,23 +11,20 @@ namespace GdaxApi.Pagination
 
         public U After { get; internal set; }
 
-
-        //private enumerator class
         private class PageEnumerator: IEnumerator
         {
-            private T[] Items;
+            private readonly T[] items;
             private int position = -1;
 
-            //constructor
             public PageEnumerator(T[] list)
             {
-                Items = list;
+                items = list;
             }
 
             public bool MoveNext()
             {
                 position++;
-                return (position < Items.Length);
+                return (position < items.Length);
             }
 
             public void Reset() { position = -1; }
@@ -38,9 +35,8 @@ namespace GdaxApi.Pagination
                 {
                     try
                     {
-                        return Items[position];
+                        return items[position];
                     }
-
                     catch (IndexOutOfRangeException)
                     {
                         throw new InvalidOperationException();
