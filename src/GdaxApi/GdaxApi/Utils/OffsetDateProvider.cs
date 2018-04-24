@@ -13,42 +13,45 @@ namespace GdaxApi.Authentication
     {
         /// <summary>
         /// Gets the stored time offset between the GDAX API web servers time and the clients local time in seconds.
-        /// <para>Note that the stored vs real offset can change over time, periodically check that the stored vs real value does not exceed 30 seconds
-        /// or you will start to recieve "request timestamp expired" exceptions.</para>
-        /// <para>Use the <see cref="RealOffset"/> method with the optional parameter 'refresh' set to true to refresh the stored offset.</para>
+        /// <para>To allow the client time to more closely match the GDAX API web servers time reducing the likelyhood of a "request timestamp expired" exception,</para>
+        /// <para>use <see cref="RealOffset"/> to get the real offset and use <see cref="Refresh"/> to refresh the stored offset.</para>
+        /// <para>Note that the stored vs real offset can change over time, periodically check that the stored vs real value does not exceed
+        /// ±30 seconds and refresh when it does, or you will start to recieve "request timestamp expired" exceptions.</para>
         /// </summary>
         public double StoredOffset { get; private set; } = 0d;
 
-        public DateTimeOffset Now => DateTimeOffset.Now;
+        public DateTimeOffset Now => DateTimeOffset.Now.AddSeconds(StoredOffset);
 
-        public double UnixTimestamp => DateTime.UtcNow.ToUnixTimestamp() - StoredOffset;
+        public double UnixTimestamp => DateTime.UtcNow.ToUnixTimestamp() + StoredOffset;
 
         /// <summary>
         /// Returns the real time offset between the GDAX API web servers time and the clients local time in seconds.
-        /// <para>To allow the client time to more closely match the GDAX API web servers time reducing the likelyhood of a "request timestamp expired" exception,
-        /// you can refresh the stored time offset by using the optional parameter 'refresh'.</para>
+        /// <para>To allow the client time to more closely match the GDAX API web servers time reducing the likelyhood of a "request timestamp expired" exception,</para>
+        /// <para>use <see cref="StoredOffset"/> to get the stored offset and use <see cref="Refresh"/> to refresh the stored offset.</para>
         /// <para>Note that the real vs stored offset can change over time, periodically check that the real vs stored value does not exceed
-        /// 30 seconds and refresh when it does, or you will start to recieve "request timestamp expired" exceptions.</para>
+        /// ±30 seconds and refresh when it does, or you will start to recieve "request timestamp expired" exceptions.</para>
         /// </summary>
-        public async Task<double> RealOffset(GdaxApiClient api, bool refresh = false)
+        public double RealOffset(ApiTime exchangetime)
         {
-            ApiTime exchangetime;
-
-            try
+            if (exchangetime == null)
             {
-                exchangetime = await api.GetTime().SendAsync();
+                throw new ArgumentNullException(nameof(exchangetime));
             }
-            catch { throw; }
 
-            double offset = DateTime.UtcNow.ToUnixTimestamp() - exchangetime.UnixTimestamp;
-            if (refresh)
-                this.StoredOffset = offset;
+            return exchangetime.UnixTimestamp - DateTime.UtcNow.ToUnixTimestamp();
+        }
 
-            Debug.WriteLine(string.Format("GdaxTimeOffset: Local UTC Time   {0}", DateTimeOffset.Now.ToUniversalTime()));
-            Debug.WriteLine(string.Format("GdaxTimeOffset: GDAX Server Time {0}", exchangetime.Timestamp));
-            Debug.WriteLine(string.Format("GdaxTimeOffset: Timestamp offset {0}", offset));
+        /// <summary>
+        /// Refreshes the StoredOffset
+        /// </summary>
+        public void Refresh(ApiTime exchangetime)
+        {
+            if (exchangetime == null)
+            {
+                throw new ArgumentNullException(nameof(exchangetime));
+            }
 
-            return offset;
+            this.StoredOffset = exchangetime.UnixTimestamp - DateTime.UtcNow.ToUnixTimestamp();
         }
     }
 }

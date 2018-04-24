@@ -27,7 +27,9 @@
             }
 
             if (authenticationHandler.InnerHandler == null)
+            {
                 authenticationHandler.InnerHandler = new HttpClientHandler();
+            }
 
             this.Serializer = serializer ?? new Serializer();
             this.httpClient = new HttpClient(authenticationHandler);
