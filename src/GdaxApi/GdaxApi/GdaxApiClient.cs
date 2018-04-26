@@ -7,7 +7,7 @@
     using GdaxApi.Exceptions;
     using GdaxApi.Utils;
 
-    public class GdaxApiClient : IDisposable
+    public class GdaxApiClient: IDisposable
     {
         private static readonly Uri BaseUriPublic = new Uri("https://api.gdax.com/");
         private static readonly Uri BaseUriSandbox = new Uri("https://api-public.sandbox.gdax.com/");
@@ -24,6 +24,11 @@
             if (authenticationHandler == null)
             {
                 throw new ArgumentNullException(nameof(authenticationHandler));
+            }
+
+            if (authenticationHandler.InnerHandler == null)
+            {
+                authenticationHandler.InnerHandler = new HttpClientHandler();
             }
 
             this.Serializer = serializer ?? new Serializer();

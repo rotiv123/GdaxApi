@@ -9,7 +9,7 @@
     using System.Threading.Tasks;
     using GdaxApi.Utils;
 
-    public class GdaxAuthenticationHandler : DelegatingHandler
+    public class GdaxAuthenticationHandler: DelegatingHandler
     {
         private readonly GdaxCredentials credentials;
         private readonly IDateProvider dateProvider;
